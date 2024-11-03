@@ -1,0 +1,83 @@
+import pygame
+
+def main():
+    pygame.init()
+    
+    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("Road to Pro win!")
+    
+    background = pygame.image.load("racetrack.png")
+    background.convert()
+    background = pygame.transform.scale(background, (800, 600))
+    
+    image = pygame.image.load('Daytona RtP win.png')
+    image.convert_alpha()
+    image = pygame.transform.scale(image, (150, 150))
+    image_x = 300
+    image_y = 220
+    
+    dx = random.randint(-10, 10)
+    dy = random.randint(-10, 10)
+    
+    clock = pygame.time.Clock()
+    keepGoing = True
+    mode = "bounce"
+    
+     while keepGoing:
+        clock.tick(30)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                keepGoing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    dx = random.randint(-10, 10)
+                    dy = random.randint(-10, 10)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_m:
+                    if mode == "bounce":
+                        mode = "wrap"
+                    else:
+                        mode= "bounce"
+
+        image_x += dx
+        image_y += dy
+            
+        if mode == "bounce":
+            # bounce - using rect         
+    
+            c_rect = charlie.get_rect()
+            c_rect.left = image_x
+            c_rect.top = image_y
+            
+            if c_rect.right > screen.get_width():
+                dx *= -1
+            if c_rect.left < 0:
+                dx *= -1
+            if c_rect.top < 0:
+                dy *= -1
+            if c_rect.bottom > screen.get_height():
+                dy *= -1
+    
+        else:
+            # wrap        
+            if image_x > screen.get_width():
+                image_x = 0
+            if image_x < 0:
+                image_x = screen.get_width()
+                
+            if image_y > screen.get_height():
+                image_y = 0
+            if image_y < 0:
+                image_y = screen.get_height()
+            
+        
+        
+        screen.blit(background, (0,0))
+        screen.blit(image, (image_x, image_y))
+        
+        pygame.display.flip()
+        
+    pygame.quit()
+    
+if __name__ == "__main__":
+    main()

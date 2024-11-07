@@ -1,0 +1,51 @@
+class Node:
+    def __init__(self, description, choices):
+        self.description = description
+        self.choices = choices
+        
+def startGame():
+    nodes = {
+        'start': Node("The floor is lava! Do you want to jump to the left or climb on the right?", {
+            '1' :'quit',
+            '2' :'climb'
+        }),
+        'rockClimbing': Node("You have reached greater heights. Do you want to keep climbing or do pakour?", {
+            '1' :'quit',
+            '2' :'new platform'
+        }),
+        'parkour' :Node("you are now on piece of land surrounded by lava. Do you choose wooden boat or fire resistant boat?", {
+            '1' :'quit',
+            '2' :'safe'
+        }),           
+    }
+
+    currentNode = 'start'
+    
+    while currentNode != 'quit':
+        node = nodes[currentNode]
+        print(node.description)
+        for choice, description in node.choices.items():
+            print(f"{choice}: {description}")
+        
+        playerChoice = input("Choose an option: ")
+        
+        if playerChoice == '1':
+            if currentNode == 'start':
+                currentNode = 'quit'
+            elif currentNode == 'rockClimbing':
+                currentNode = 'quit'
+            elif currentNode == 'parkour':
+                currentNode = 'quit'
+        elif playerChoice == '2':
+            if currentNode == 'start':
+                currentNode = 'climb'
+            elif currentNode == 'rockClimbing':
+                currentNode = 'parkour'
+            elif currentNode == 'parkour':
+                currentNode = 'safe'
+        else:
+
+            print("Game Over. You burned alive!")
+
+if __name__ == "__main__":
+    startGame()

@@ -1,0 +1,74 @@
+#Slide and catch game
+
+import pygame, random
+pygame.init()
+
+# Constants
+WIDTH, HEIGHT = 650, 500
+FPS = 60
+TARGET_FALL_SPEED = 5
+NUM_TARGETS = 5
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Slide and Catch Game")
+
+# Character class
+class Character:
+    def __init__(self):
+        self.image = pygame.Surface((50, 50))
+        self.image.fill((0, 255, 0))
+        self.rect = self.image.get_rect(center=(WIDTH // 2, HEIGHT - 30))
+        self.speed = 10
+
+    def move(self, dx):
+        self.rect.x += dx * self.speed
+        self.rect.x = max(0, min(WIDTH - self.rect.width, self.rect.x))
+
+
+# Target class
+class Target:
+    def __init__(self):
+        self.image = pygame.Surface((30, 30))
+        self.image.fill((255, 0, 0))
+        self.rect = self.image.get_rect(center=(random.randint(0, WIDTH), 0))
+        self.speed = random.randint(2, 5)
+
+    def fall(self):
+        self.rect.y += self.speed
+        if self.rect.y > HEIGHT:
+            self.rect.y = 0
+            self.rect.x = random.randint(0, WIDTH)
+
+# Game loop
+def main():
+    clock = pygame.time.Clock()
+    character = Character()
+    targets = [Target() for _ in range(NUM_TARGETS)]
+    running = True
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            character.move(-1)
+        if keys[pygame.K_RIGHT]:
+            character.move(1)
+
+        for target in targets:
+            target.fall()
+
+        screen.fill((255, 255, 255))
+        screen.blit(character.image, character.rect)
+        for target in targets:
+            screen.blit(target.image, target.rect)
+
+        pygame.display.flip()
+        clock.tick(FPS)
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
